@@ -16,6 +16,7 @@
     "dist/index.d.ts"
   ],
   "scripts": {
+    "start": "rimraf dist && node ./build/start.mjs",
     "build": "rimraf dist && node ./build/build.mjs",
     "postbuild": "tsc",
     "lint": "eslint .",

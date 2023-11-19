@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>fetch-api-progress</title>
+  </head>
+  <body>
+    <div>
+      <label for="upload">Upload:</label
+      ><progress id="upload" value="0"></progress>
+    </div>
+    <div>
+      <label for="download">Download:</label
+      ><progress id="download" value="0"></progress>
+    </div>
+
+    <script>
+      // Live reload. See https://esbuild.github.io/api/#live-reload
+      new EventSource("/esbuild").addEventListener("change", () =>
+        location.reload()
+      );
+    </script>
+
+    <script type="module">
+      const { trackRequestProgress, trackResponseProgress } = await import(
+        "/dist/index.js"
+      );
+
+      const blob = new Blob([new Uint8Array(1024 * 1024)]);
+
+      const uploadProgress = document.getElementById("upload");
+      const downloadProgress = document.getElementById("download");
+
+      const request = trackRequestProgress(
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/octet-stream"
+          },
+          body: blob
+        },
+        (progress) => {
+          console.log("Upload progress:", progress.loaded / progress.total);
+          uploadProgress.value = progress.loaded / progress.total;
+        }
+      );
+
+      const response = trackResponseProgress(
+        await fetch("https://httpbin.org/put", request),
+        (progress) => {
+          console.log("Download progress:", progress.loaded / progress.total);
+          downloadProgress.value = progress.loaded / progress.total;
+        }
+      );
+    </script>
+  </body>
+</html>
