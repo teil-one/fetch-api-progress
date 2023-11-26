@@ -23,7 +23,8 @@
     "lint:fix": "eslint . --fix",
     "prettier": "prettier . --check",
     "prettier:fix": "prettier . --write",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "pretest": "node ./build/test-build.mjs",
+    "test": "node --test --experimental-test-coverage tests/node/"
   },
   "keywords": [
     "fetch",
@@ -39,7 +40,7 @@
   },
   "homepage": "https://github.com/teil-one/fetch-api-progress#readme",
   "volta": {
-    "node": "20.9.0",
+    "node": "20.10.0",
     "npm": "10.2.4"
   },
   "devDependencies": {
@@ -50,6 +51,7 @@
     "eslint-config-prettier": "^9.0.0",
     "prettier": "3.1.0",
     "rimraf": "^5.0.5",
+    "serve": "^14.2.1",
     "typescript": "^5.2.2"
   }
 }

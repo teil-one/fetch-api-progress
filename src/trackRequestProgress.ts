@@ -1,6 +1,8 @@
+import { FetchProgressEvent } from "./FetchProgressEvent";
+
 export function trackRequestProgress(
   request: RequestInit,
-  onProgress: (arg0: ProgressEvent) => void
+  onProgress: (arg0: FetchProgressEvent) => void
 ) {
   if (!onProgress) {
     return request;
@@ -9,7 +11,7 @@ export function trackRequestProgress(
   const supportsRequestStreams = (() => {
     let duplexAccessed = false;
 
-    const hasContentType = new Request("", {
+    const hasContentType = new Request("https://teil.one", {
       body: new ReadableStream(),
       method: "POST",
       // @ts-expect-error duplex is not supported in type definitions yet
@@ -23,8 +25,13 @@ export function trackRequestProgress(
     return duplexAccessed && !hasContentType;
   })();
 
-  if (!request.body || !supportsRequestStreams) {
-    // TODO: Report empty progress
+  if (
+    !request.body ||
+    !supportsRequestStreams ||
+    /^get$/i.test(request.method ?? "") ||
+    /^head$/i.test(request.method ?? "")
+  ) {
+    // GET and HEAD requests cannot have body
     return request;
   }
 
@@ -36,20 +43,34 @@ export function trackRequestProgress(
   let loaded = 0;
 
   const progressTrackingStream = new TransformStream({
+    start() {
+      // Report 0 progress
+      const progress = new FetchProgressEvent({
+        lengthComputable: supportsRequestStreams,
+        loaded: 0,
+        total
+      });
+      onProgress(progress);
+    },
     transform(chunk, controller) {
       controller.enqueue(chunk);
       loaded += chunk.byteLength;
-      // https://developer.mozilla.org/en-US/docs/Web/API/ProgressEvent/ProgressEvent
-      const progress = new ProgressEvent("progress", {
+
+      const progress = new FetchProgressEvent({
         lengthComputable: supportsRequestStreams,
         loaded,
         total
       });
       onProgress(progress);
     },
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    flush(controller) {
-      // TODO: Report 100% progress
+    flush() {
+      // Report 100% progress
+      const progress = new FetchProgressEvent({
+        lengthComputable: supportsRequestStreams,
+        loaded: total,
+        total
+      });
+      onProgress(progress);
     }
   });
 
