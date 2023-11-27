@@ -35,9 +35,14 @@ export function trackRequestProgress(
     return request;
   }
 
-  // TODO: Handle all body types
-  const blob = request.body as unknown as Blob;
-  // TODO: Handle all body types
+  if (!(request.body instanceof Blob)) {
+    throw new Error(
+      "Request progress tracking is supported only for Blob and File"
+    );
+  }
+
+  const blob = request.body;
+
   const total = blob.size;
 
   let loaded = 0;

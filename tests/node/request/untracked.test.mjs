@@ -95,5 +95,24 @@ describe("trackRequestProgress return untracked request", () => {
         assert.strictEqual(request, sourceRequest);
       });
     });
+
+    describe("With FormData", () => {
+      let sourceRequest = {
+        method: "POST",
+        headers: {
+          "Content-Type": "multipart/form-data"
+        },
+        body: new FormData()
+      };
+
+      test("Throws an error", () => {
+        assert.throws(
+          () => trackRequestProgress(sourceRequest, progressCallback),
+          new Error(
+            "Request progress tracking is supported only for Blob and File"
+          )
+        );
+      });
+    });
   });
 });
