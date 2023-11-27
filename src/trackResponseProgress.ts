@@ -1,6 +1,8 @@
+import { FetchProgressEvent } from "./FetchProgressEvent";
+
 export function trackResponseProgress(
   response: Response,
-  onProgress: (arg0: ProgressEvent) => void
+  onProgress: (arg0: FetchProgressEvent) => void
 ) {
   if (!onProgress) {
     return response;
@@ -9,35 +11,51 @@ export function trackResponseProgress(
   const isSupported =
     typeof Response !== "undefined" && typeof ReadableStream !== "undefined";
   if (!response.body || !isSupported) {
-    // TODO: Report empty progress
     return response;
   }
 
   const reader = response.body.getReader();
 
   let loaded = 0;
-  // TODO: Check reporting for compressed body
   const contentLength = response.headers.get("content-length");
-  const total = contentLength ? parseInt(contentLength, 10) : undefined;
+  const contentEncoding = response.headers.get("content-encoding");
+  const contentCompressed =
+    contentEncoding && !/^identity$/i.test(contentEncoding);
+  const total =
+    contentLength && !contentCompressed
+      ? parseInt(contentLength, 10)
+      : undefined;
+
   const stream = new ReadableStream({
     start(controller) {
       (async function read() {
         const { done, value } = await reader.read();
         if (done) {
-          // TODO: Report 100% progress
+          // Report 100% progress
+          onProgress(
+            new FetchProgressEvent({
+              lengthComputable: typeof total !== "undefined",
+              loaded,
+              total
+            })
+          );
+
           controller.close();
           return;
         }
+
         if (value) {
           loaded += value.length;
 
-          const progress = new ProgressEvent("progress", {
-            lengthComputable: true,
-            loaded,
-            total
-          });
-          onProgress(progress);
+          onProgress(
+            new FetchProgressEvent({
+              lengthComputable: typeof total !== "undefined",
+              loaded,
+              total
+            })
+          );
         }
+
         controller.enqueue(value);
         read();
       })();
