@@ -1,6 +1,6 @@
 {
   "name": "fetch-api-progress",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Upload and download progress for Fetch API",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -12,9 +12,12 @@
     }
   },
   "files": [
-    "dist/index.js",
-    "dist/index.d.ts"
+    "dist/*"
   ],
+  "repository": {
+    "type": "git",
+    "url": "github:teil-one/fetch-api-progress"
+  },
   "scripts": {
     "start": "rimraf dist && node ./build/start.mjs",
     "build": "rimraf dist && node ./build/build.mjs",
@@ -24,8 +27,11 @@
     "prettier": "prettier . --check",
     "prettier:fix": "prettier . --write",
     "pretest": "node ./build/test-build.mjs",
-    "test": "start-server-and-test 'node tests/serve.mjs' 3000 'node --test --experimental-test-coverage tests/node'"
-  },
+    "test": "start-server-and-test 'node tests/serve.mjs' 3000 'node --test --experimental-test-coverage tests/node'",
+    "prepublishOnly": "npm test",
+    "prepare": "npm run build",
+    "preversion": "npm test"
+},
   "keywords": [
     "fetch",
     "Fetch API",
