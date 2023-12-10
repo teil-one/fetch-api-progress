@@ -1,6 +1,6 @@
 {
   "name": "fetch-api-progress",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Upload and download progress for Fetch API",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -31,7 +31,7 @@
     "prepublishOnly": "npm test",
     "prepare": "npm run build",
     "preversion": "npm test"
-},
+  },
   "keywords": [
     "fetch",
     "Fetch API",
