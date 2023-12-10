@@ -52,6 +52,13 @@ describe("trackRequestProgress track progress", () => {
       }
     });
 
+    test("Reports 0 progress at the start", () => {
+      const progress =
+        progressCallback.mock.calls[0]
+          .arguments[0];
+      assert.strictEqual(progress.loaded === 0, true);
+    });
+
     test("Reports 100% progress at the end", () => {
       const progress =
         progressCallback.mock.calls[progressCallback.mock.calls.length - 1]

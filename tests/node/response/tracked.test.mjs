@@ -15,11 +15,7 @@ describe("trackResponseProgress track progress", () => {
         progressCallback
       );
 
-      const reader = response.body.getReader();
-      expectedSize = 0;
-      for await (const chunk of readChunks(reader)) {
-        expectedSize += chunk.length;
-      }
+      expectedSize = await readResponse(response);
     });
 
     test("Reports progress", () => {
@@ -33,6 +29,13 @@ describe("trackResponseProgress track progress", () => {
         assert.strictEqual(progress.loaded <= progress.total, true);
         assert.strictEqual(progress.lengthComputable, true);
       }
+    });
+
+    test("Reports 0 progress at the start", () => {
+      const progress =
+        progressCallback.mock.calls[0]
+          .arguments[0];
+      assert.strictEqual(progress.loaded === 0, true);
     });
 
     test("Reports 100% progress at the end", () => {
@@ -54,10 +57,7 @@ describe("trackResponseProgress track progress", () => {
         progressCallback
       );
 
-      const reader = response.body.getReader();
-      for await (const chunk of readChunks(reader)) {
-        chunk.length;
-      }
+      await readResponse(response);
     });
 
     test("Reports correct vales", () => {
@@ -81,10 +81,7 @@ describe("trackResponseProgress track progress", () => {
         progressCallback
       );
 
-      const reader = response.body.getReader();
-      for await (const chunk of readChunks(reader)) {
-        chunk.length;
-      }
+      await readResponse(response);
     });
 
     test("Reports correct vales", () => {
@@ -97,6 +94,16 @@ describe("trackResponseProgress track progress", () => {
     });
   });
 });
+
+async function readResponse(response) {
+  let bodyLength = 0;
+  const reader = response.body.getReader();
+  for await (const chunk of readChunks(reader)) {
+    bodyLength += chunk.length;
+  }
+
+  return bodyLength;
+}
 
 function readChunks(reader) {
   return {

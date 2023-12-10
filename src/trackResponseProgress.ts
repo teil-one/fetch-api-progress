@@ -28,6 +28,15 @@ export function trackResponseProgress(
 
   const stream = new ReadableStream({
     start(controller) {
+      // Report 0 progress
+      onProgress(
+        new FetchProgressEvent({
+          lengthComputable: typeof total !== "undefined",
+          loaded,
+          total
+        })
+      );
+
       (async function read() {
         const { done, value } = await reader.read();
         if (done) {
