@@ -27,7 +27,7 @@
     "prettier": "prettier . --check",
     "prettier:fix": "prettier . --write",
     "pretest": "node ./build/test-build.mjs",
-    "test": "start-server-and-test 'node tests/serve.mjs' 3000 'node --test --experimental-test-coverage tests/node'",
+    "test": "start-server-and-test 'node tests/serve.mjs' 3000 'node --test --experimental-test-coverage tests/node/**/*.test.mjs'",
     "prepublishOnly": "npm test",
     "prepare": "npm run build",
     "preversion": "npm test"
