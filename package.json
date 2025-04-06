@@ -22,14 +22,14 @@
   "scripts": {
     "start": "rimraf dist && node ./build/start.mjs",
     "build": "rimraf dist && node ./build/build.mjs",
-    "postbuild": "tsc && publint",
+    "postbuild": "tsc",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "prettier": "prettier . --check",
     "prettier:fix": "prettier . --write",
     "pretest": "node ./build/test-build.mjs",
     "test": "start-server-and-test 'node tests/serve.mjs' 3000 'node --test --experimental-test-coverage tests/node/**/*.test.mjs'",
-    "prepublishOnly": "npm test",
+    "prepublishOnly": "npm test && publint",
     "prepare": "npm run build",
     "preversion": "npm test"
   },
