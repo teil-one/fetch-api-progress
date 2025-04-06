@@ -1,4 +1,4 @@
-import { FetchProgressEvent } from "./FetchProgressEvent";
+import { createProgressEvent, type FetchProgressEvent } from "./createProgressEvent";
 
 export function trackResponseProgress(
   response: Response,
@@ -30,7 +30,7 @@ export function trackResponseProgress(
     start(controller) {
       // Report 0 progress
       onProgress(
-        new FetchProgressEvent({
+        createProgressEvent({
           lengthComputable: typeof total !== "undefined",
           loaded,
           total
@@ -42,7 +42,7 @@ export function trackResponseProgress(
         if (done) {
           // Report 100% progress
           onProgress(
-            new FetchProgressEvent({
+            createProgressEvent({
               lengthComputable: typeof total !== "undefined",
               loaded,
               total
@@ -57,7 +57,7 @@ export function trackResponseProgress(
           loaded += value.length;
 
           onProgress(
-            new FetchProgressEvent({
+            createProgressEvent({
               lengthComputable: typeof total !== "undefined",
               loaded,
               total

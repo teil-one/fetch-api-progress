@@ -1,4 +1,4 @@
-import { FetchProgressEvent } from "./FetchProgressEvent";
+import { createProgressEvent, type FetchProgressEvent } from "./createProgressEvent";
 
 export function trackRequestProgress(
   request: RequestInit,
@@ -50,7 +50,7 @@ export function trackRequestProgress(
   const progressTrackingStream = new TransformStream({
     start() {
       // Report 0 progress
-      const progress = new FetchProgressEvent({
+      const progress = createProgressEvent({
         lengthComputable: supportsRequestStreams,
         loaded: 0,
         total
@@ -61,7 +61,7 @@ export function trackRequestProgress(
       controller.enqueue(chunk);
       loaded += chunk.byteLength;
 
-      const progress = new FetchProgressEvent({
+      const progress = createProgressEvent({
         lengthComputable: supportsRequestStreams,
         loaded,
         total
@@ -70,7 +70,7 @@ export function trackRequestProgress(
     },
     flush() {
       // Report 100% progress
-      const progress = new FetchProgressEvent({
+      const progress = createProgressEvent({
         lengthComputable: supportsRequestStreams,
         loaded: total,
         total

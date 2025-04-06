@@ -1,5 +1,3 @@
-import { FetchProgressEvent } from "./FetchProgressEvent";
-import { trackRequestProgress } from "./trackRequestProgress";
-import { trackResponseProgress } from "./trackResponseProgress";
-
-export { trackRequestProgress, trackResponseProgress, FetchProgressEvent };
+export type { FetchProgressEvent } from "./createProgressEvent";
+export * from "./trackRequestProgress";
+export * from "./trackResponseProgress";
