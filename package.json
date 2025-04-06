@@ -7,8 +7,9 @@
   "type": "module",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/index.js"
     }
   },
   "files": [
@@ -16,7 +17,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "github:teil-one/fetch-api-progress"
+    "url": "git+https://github.com/teil-one/fetch-api-progress.git"
   },
   "scripts": {
     "start": "rimraf dist && node ./build/start.mjs",
@@ -28,7 +29,7 @@
     "prettier:fix": "prettier . --write",
     "pretest": "node ./build/test-build.mjs",
     "test": "start-server-and-test 'node tests/serve.mjs' 3000 'node --test --experimental-test-coverage tests/node/**/*.test.mjs'",
-    "prepublishOnly": "npm test",
+    "prepublishOnly": "npm test && publint",
     "prepare": "npm run build",
     "preversion": "npm test"
   },
@@ -56,6 +57,7 @@
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^10.1.1",
     "prettier": "^3.5.3",
+    "publint": "^0.3.10",
     "rimraf": "^6.0.1",
     "serve": "^14.2.4",
     "start-server-and-test": "^2.0.11",
