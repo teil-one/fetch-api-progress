@@ -1,5 +1,15 @@
 import { FetchProgressEvent } from "./FetchProgressEvent";
 
+/**
+ * Function that tracks the body upload progress of a fetch request.  It takes a `RequestInit` object and a callback 
+ * function as arguments.  The callback function is called with a `FetchProgressEvent` object that contains information 
+ * about the progress of the upload.
+ *
+ * @param {RequestInit} request - The request object to be tracked.
+ * @param {(arg0: FetchProgressEvent) => void} onProgress - The callback function to be called with progress updates.
+ * @returns {RequestInit} - The modified request object with progress tracking enabled.  Make sure to pass this request 
+ * object to the fetch function.
+ */
 export function trackRequestProgress(
   request: RequestInit,
   onProgress: (arg0: FetchProgressEvent) => void
