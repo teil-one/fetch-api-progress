@@ -21,6 +21,7 @@
   },
   "scripts": {
     "start": "rimraf dist && node ./build/start.mjs",
+    "prebuild": "npm run prettier && npm run lint",
     "build": "rimraf dist && node ./build/build.mjs",
     "postbuild": "tsc",
     "lint": "eslint .",
@@ -30,7 +31,7 @@
     "pretest": "node ./build/test-build.mjs",
     "test": "start-server-and-test 'node tests/serve.mjs' 3000 'node --test --experimental-test-coverage tests/node/**/*.test.mjs'",
     "prepublishOnly": "npm test && publint",
-    "prepare": "npm run build",
+    "prepack": "npm run build",
     "preversion": "npm test"
   },
   "keywords": [
@@ -51,11 +52,14 @@
     "npm": "11.2.0"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.3.1",
+    "@eslint/js": "^9.24.0",
     "@typescript-eslint/eslint-plugin": "^8.29.0",
     "@typescript-eslint/parser": "^8.29.0",
     "esbuild": "^0.25.2",
-    "eslint": "^8.57.1",
+    "eslint": "^9.24.0",
     "eslint-config-prettier": "^10.1.1",
+    "globals": "^16.0.0",
     "prettier": "^3.5.3",
     "publint": "^0.3.10",
     "rimraf": "^6.0.1",
