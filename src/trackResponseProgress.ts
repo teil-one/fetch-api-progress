@@ -1,5 +1,15 @@
 import { FetchProgressEvent } from "./FetchProgressEvent";
 
+/**
+ * Function that tracks the body download progress of a fetch response.  It takes a `Response` object and a callback 
+ * function as arguments.  The callback function is called with a `FetchProgressEvent` object whenever the progress 
+ * changes.
+ *
+ * @param {Response} response - The fetch response to track.
+ * @param {(arg0: FetchProgressEvent) => void} onProgress - The callback function to call with the progress event.
+ * @returns {Response} - A new response object that uses a readable stream, or the original response object if readable 
+ * streams are not supported, or the response carries no body.
+ */
 export function trackResponseProgress(
   response: Response,
   onProgress: (arg0: FetchProgressEvent) => void
