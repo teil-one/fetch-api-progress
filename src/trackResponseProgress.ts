@@ -1,4 +1,4 @@
-import { FetchProgressEvent } from "./FetchProgressEvent";
+import { createProgressEvent, type FetchProgressEvent } from "./createProgressEvent";
 
 /**
  * Function that tracks the body download progress of a fetch response.  It takes a `Response` object and a callback 
@@ -40,7 +40,7 @@ export function trackResponseProgress(
     start(controller) {
       // Report 0 progress
       onProgress(
-        new FetchProgressEvent({
+        createProgressEvent({
           lengthComputable: typeof total !== "undefined",
           loaded,
           total
@@ -52,7 +52,7 @@ export function trackResponseProgress(
         if (done) {
           // Report 100% progress
           onProgress(
-            new FetchProgressEvent({
+            createProgressEvent({
               lengthComputable: typeof total !== "undefined",
               loaded,
               total
@@ -67,7 +67,7 @@ export function trackResponseProgress(
           loaded += value.length;
 
           onProgress(
-            new FetchProgressEvent({
+            createProgressEvent({
               lengthComputable: typeof total !== "undefined",
               loaded,
               total

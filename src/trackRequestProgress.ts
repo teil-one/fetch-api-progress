@@ -1,4 +1,4 @@
-import { FetchProgressEvent } from "./FetchProgressEvent";
+import { createProgressEvent, type FetchProgressEvent } from "./createProgressEvent";
 
 /**
  * Function that tracks the body upload progress of a fetch request.  It takes a `RequestInit` object and a callback 
@@ -60,7 +60,7 @@ export function trackRequestProgress(
   const progressTrackingStream = new TransformStream({
     start() {
       // Report 0 progress
-      const progress = new FetchProgressEvent({
+      const progress = createProgressEvent({
         lengthComputable: supportsRequestStreams,
         loaded: 0,
         total
@@ -71,7 +71,7 @@ export function trackRequestProgress(
       controller.enqueue(chunk);
       loaded += chunk.byteLength;
 
-      const progress = new FetchProgressEvent({
+      const progress = createProgressEvent({
         lengthComputable: supportsRequestStreams,
         loaded,
         total
@@ -80,7 +80,7 @@ export function trackRequestProgress(
     },
     flush() {
       // Report 100% progress
-      const progress = new FetchProgressEvent({
+      const progress = createProgressEvent({
         lengthComputable: supportsRequestStreams,
         loaded: total,
         total
