@@ -46,7 +46,7 @@
   },
   "homepage": "https://github.com/teil-one/fetch-api-progress#readme",
   "volta": {
-    "node": "20.10.0",
+    "node": "22.14.0",
     "npm": "10.2.5"
   },
   "devDependencies": {
