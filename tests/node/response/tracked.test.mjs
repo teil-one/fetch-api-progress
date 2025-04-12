@@ -28,12 +28,16 @@ describe("trackResponseProgress track progress", () => {
         assert.strictEqual(progress.total, expectedSize);
         assert.strictEqual(progress.loaded <= progress.total, true);
         assert.strictEqual(progress.lengthComputable, true);
+        if (progress.loaded > 0 && progress.loaded < progress.total) {
+          assert.notStrictEqual(progress.chunk, undefined);
+        }
       }
     });
 
     test("Reports 0 progress at the start", () => {
       const progress = progressCallback.mock.calls[0].arguments[0];
       assert.strictEqual(progress.loaded === 0, true);
+      assert.strictEqual(progress.chunk, undefined);
     });
 
     test("Reports 100% progress at the end", () => {
@@ -41,6 +45,7 @@ describe("trackResponseProgress track progress", () => {
         progressCallback.mock.calls[progressCallback.mock.calls.length - 1]
           .arguments[0];
       assert.strictEqual(progress.loaded === progress.total, true);
+      assert.strictEqual(progress.chunk, undefined);
     });
   });
 

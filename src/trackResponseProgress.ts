@@ -51,7 +51,7 @@ export function trackResponseProgress(
       );
 
       (async function read() {
-        const { done, value } = await reader.read();
+        const { done, value: chunk } = await reader.read();
         if (done) {
           // Report 100% progress
           onProgress(
@@ -66,19 +66,20 @@ export function trackResponseProgress(
           return;
         }
 
-        if (value) {
-          loaded += value.length;
+        if (chunk) {
+          loaded += chunk.length;
 
           onProgress(
             createProgressEvent({
               lengthComputable: typeof total !== "undefined",
               loaded,
+              chunk,
               total
             })
           );
         }
 
-        controller.enqueue(value);
+        controller.enqueue(chunk);
         read();
       })();
     }
