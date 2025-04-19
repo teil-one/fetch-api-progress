@@ -9,7 +9,7 @@ export type FetchProgressEvent = {
    * It won't be available when the initial progress report is sent (0% progress), and when progress completion is 
    * reported (100% progress).
    */
-  chunk?: Uint8Array<ArrayBufferLike>;
+  readonly chunk?: Uint8Array<ArrayBufferLike>;
 } & (
   {
       /**
