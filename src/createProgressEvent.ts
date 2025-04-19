@@ -3,8 +3,15 @@ export type FetchProgressEvent = {
    * The number of bytes that have been loaded so far.
    */
   readonly loaded: number;
+  /**
+   * The chunk of data read in the iteration.
+   * 
+   * It won't be available when the initial progress report is sent (0% progress), and when progress completion is 
+   * reported (100% progress).
+   */
+  readonly chunk?: Uint8Array<ArrayBufferLike>;
 } & (
-  | {
+  {
       /**
        * A Boolean value indicating whether the total size of the data being transferred is known.
        */
@@ -30,6 +37,7 @@ export type FetchProgressEvent = {
 export function createProgressEvent(options: {
   lengthComputable: boolean;
   loaded: number;
+  chunk?: Uint8Array<ArrayBufferLike>;
   total?: number;
 }): FetchProgressEvent {
   if (options.lengthComputable) {
@@ -40,6 +48,9 @@ export function createProgressEvent(options: {
       get loaded() {
         return options.loaded;
       },
+      get chunk() {
+        return options.chunk;
+      },
       get total() {
         return options.total!;
       }
@@ -48,6 +59,9 @@ export function createProgressEvent(options: {
   return {
     get lengthComputable() {
       return false as const;
+    },
+    get chunk() {
+      return options.chunk;
     },
     get loaded() {
       return options.loaded;

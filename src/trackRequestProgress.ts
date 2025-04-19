@@ -77,7 +77,8 @@ export function trackRequestProgress(
       const progress = createProgressEvent({
         lengthComputable: supportsRequestStreams,
         loaded,
-        total
+        chunk,
+        total,
       });
       onProgress(progress);
     },
