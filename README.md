@@ -55,7 +55,7 @@ await readResponse(trackedResponse);
 
 | Tracking progress of | Chrome | Edge | Safari | Firefox | Node.js |
 | -------------------- | ------ | ---- | ------ | ------- | ------- |
-| Request              | ✅     | ✅   | ✅     | ❌      | ✅      |
+| Request              | ✅     | ✅   | ❌     | ❌      | ✅      |
 | Response             | ✅     | ✅   | ✅     | ✅      | ✅      |
 
 ## Integrations
